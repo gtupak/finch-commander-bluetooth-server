@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="BluetoothServer:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/BluetoothServer_jar</output-path>
+    <root id="archive" name="BluetoothServer.jar">
+      <element id="module-output" name="BluetoothServer" />
+      <element id="extracted-dir" path="A:/Downloads/bluecove-2.1.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="A:/Downloads/bluecove-gpl-2.1.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
