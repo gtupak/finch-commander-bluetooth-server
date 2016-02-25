@@ -15,7 +15,7 @@ public class EchoServer {
     public final String url = "btspp://localhost:"
                                 + uuid
                                 + ";name=" + name
-                                + "authenticate=false;encrypt=false";
+                                + ";authenticate=false;encrypt=false";
 
 
     LocalDevice local = null;
