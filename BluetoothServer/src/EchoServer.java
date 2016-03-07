@@ -124,6 +124,12 @@ public class EchoServer {
                 break;
 
             case "Say":
+                 try {
+                     String toSay = matcher.group(4);
+                     mFinchCommander.processCommand(Command.SPEAK, toSay);
+                 } catch (NullPointerException ex) {
+                     printErr();
+                 }
                 System.out.println("SPEAK: Processing: $1=" + matcher.group(1) + "$2=" + matcher.group(4));
                 break;
 
