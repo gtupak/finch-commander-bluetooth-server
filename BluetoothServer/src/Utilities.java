@@ -2,41 +2,34 @@
  * Created by gabriel on 06/03/16.
  */
 public class Utilities {
-    public enum Commands {
-        MOVE_FORWARD,
-        MOVE_BACKWARDS,
-        TURN_RIGHT,
-        TURN_LEFT,
-        SPEAK
-    }
 
     /**
      * Converts a literal number to its numerical form. Must be between 1 and 10
-     * @return the converted number or 0 if not a valid literal number
+     * @return The converted number or 0 if not a valid literal number
      */
-    public int parseLiteralNumber(String litNum) {
+    public static double parseLiteralNumber(String litNum) {
         switch (litNum) {
             case "one":
-                return 1;
+                return 1.0;
             case "two":
-                return 2;
+                return 2.0;
             case "three":
-                return 3;
+                return 3.0;
             case "four":
-                return 4;
+                return 4.0;
             case "five":
-                return 5;
+                return 5.0;
             case "six":
-                return 6;
+                return 6.0;
             case "seven":
-                return 7;
+                return 7.0;
             case "eight":
-                return 8;
+                return 8.0;
             case "nine":
-                return 9;
+                return 9.0;
             case "ten":
-                return 10;
+                return 10.0;
         }
-        return 0;
+        return 0.0;
     }
 }

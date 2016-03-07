@@ -1,7 +1,7 @@
 *.class
 
 # Intellij
-.idea/
+.idea/*
 *.iml
 *.iws
 

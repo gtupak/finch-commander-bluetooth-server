@@ -11,5 +11,23 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="bluecove-2.1.0" level="project" />
     <orderEntry type="library" name="bluecove-gpl-2.1.0" level="project" />
+    <orderEntry type="module-library">
+      <library name="finch">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../libs/finch.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="jnaerator-0.9.5">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../libs/jnaerator-0.9.5.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

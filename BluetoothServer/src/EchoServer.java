@@ -28,7 +28,13 @@ public class EchoServer {
     StreamConnectionNotifier server = null;
     StreamConnection conn = null;
 
+    FinchCommander mFinchCommander;
+
     public EchoServer(){
+        // Setup the Finch
+        mFinchCommander = new FinchCommander();
+
+        // Setup bluetooth
         try{
             System.out.println("Setting device to be discoverable...");
             local = LocalDevice.getLocalDevice();
@@ -52,7 +58,7 @@ public class EchoServer {
                 try {
                     bytes = din.read(buffer, 0, BUFFER_SIZE - bytes);
                     received = new String(buffer, 0, bytes, charSet);
-                    System.out.println(received);
+                    System.out.println("RECEIVED: " + received);
                     process(received);
                     buffer = new byte[BUFFER_SIZE];
                 } catch (IOException e) {
@@ -67,28 +73,54 @@ public class EchoServer {
      * Processes the received string from the client
      */
     public void process(String toProcess) {
-//        String[] commands = toProcess.split(" "); // Split by spaces
-//        if (commands.length < 2)
-//            return; //TODO Send feedback to client
-
-        Pattern pattern = Pattern.compile("(Move|Turn|Say) (forward|backwards|left|right)? ?(\\d+|one|two|three|four|five|six|seven|eight|nine|ten)?(.*)");
+        Pattern pattern = Pattern.compile("(Move|Turn|Say) (forward|back|left|right)? ?(\\d*\\.?\\d+|one|two|three|four|five|six|seven|eight|nine|ten)?(.*)");
         Matcher matcher = pattern.matcher(toProcess);
         boolean foundMatch = matcher.matches();
         if (!foundMatch) {
-            System.err.println("ERROR: Move command has to be constructed like so:\n" +
-                            "Move [forward|backwards] <number> or \n" +
-                            "Turn [right|left] or \n" +
-                            "Speak <some words>"); // TODO send this to client
+             printErr();// TODO send this to client
             return;
         }
 
+        String direction;
+        double duration = 0.0;
+        Command cmd;
         switch(matcher.group(1)) {
             case "Move":
-                System.out.println("MOVE: Processing: $1=" + matcher.group(1) + " $2=" + matcher.group(2) + " $3=" + matcher.group(3));
+                direction = matcher.group(2);
+                if (!direction.equals("forward") && !direction.equals("back"))
+                    return;
+
+                try {
+                    duration = parseDuration(matcher.group(3));
+                } catch (NullPointerException ex) {
+                    // Not a valid number
+                    printErr();
+                    return;
+                }
+
+                cmd = direction.equals("forward") ? Command.MOVE_FORWARD : Command.MOVE_BACKWARDS;
+                mFinchCommander.processCommand(cmd, duration);
+
+                System.out.println("MOVE: Processed: $1=" + matcher.group(1) + " $2=" + matcher.group(2) + " $3=" + matcher.group(3));
                 break;
 
             case "Turn":
-                System.out.println("TURN: Processing: $1=" + matcher.group(1) + " $2=" + matcher.group(2));
+                direction = matcher.group(2);
+                if (!direction.equals("right") && !direction.equals("left"))
+                    return;
+
+                try {
+                    duration = parseDuration(matcher.group(3));
+                } catch (NullPointerException ex) {
+                    // Not a valid number
+                    printErr();
+                    return;
+                }
+
+                cmd = direction.equals("right") ? Command.TURN_RIGHT : Command.TURN_LEFT;
+                mFinchCommander.processCommand(cmd, duration);
+
+                System.out.println("TURN: Processing: $1=" + matcher.group(1) + " $2=" + matcher.group(2) + " $3=" + matcher.group(3));
                 break;
 
             case "Say":
@@ -98,17 +130,24 @@ public class EchoServer {
             default:
                 System.err.println("ERROR: Found match wrongly");
         }
+    }
 
-//        switch(commands[0]) {
-//            case "Move":
-//                if ((commands.length != 4) && (commands[]) {
-//
-//                    return;
-//                }
-//                if (commands[1].equals("forward") ) {
-//                    Integer.parseInt(commands[2]);
-//                }
-//        }
+    private double parseDuration(String dur) {
+        double result;
+        try {
+            result = Double.parseDouble(dur);
+        } catch (NumberFormatException ex) {
+            // Number is in literal form
+            result = Utilities.parseLiteralNumber(dur);
+        }
+        return result;
+    }
+
+    private void printErr() {
+        System.err.println("ERROR: Move command has to be constructed like so:\n" +
+                "Move [forward|backwards] <number> or \n" +
+                "Turn [right|left] or \n" +
+                "Speak <some words>");
     }
 
     public static void main (String args[]){
